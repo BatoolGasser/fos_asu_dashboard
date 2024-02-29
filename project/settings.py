@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "user",
 ]
 
 MIDDLEWARE = [
@@ -75,11 +76,17 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "OPTIONS": {
+            'sql_mode': 'STRICT_ALL_TABLES',
+            "init_command": "SET default_storage_engine=INNODB",
+        },
+        "NAME": "fos_db",
+        "HOST": "127.0.0.1",
+        "USER": "root",
+        "PORT": "3306"
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
