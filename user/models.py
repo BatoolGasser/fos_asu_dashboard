@@ -19,9 +19,6 @@ class Doctor(models.Model):
     class Meta:
         db_table = 'Doctor'
 
-    def __str__(self):
-        return self.doctor_name
-
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -41,9 +38,6 @@ class Student(models.Model):
     class Meta:
         db_table = 'Student'
 
-    def __str__(self):
-        return self.student_name
-
 
 class Role(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -60,9 +54,6 @@ class Role(models.Model):
     class Meta:
         db_table = 'Role'
 
-    def __str__(self):
-        return self.role_name
-
 
 class Program(models.Model):
     program_id = models.UUIDField(
@@ -78,14 +69,11 @@ class Program(models.Model):
     class Meta:
         db_table = 'Program'
 
-    def __str__(self):
-        return self.program_name
-
 
 class Courses(models.Model):
     course_code = models.CharField(max_length=10, primary_key=True)
-    course_name = models.CharField(max_length=70, null=True)
-    credit_hours = models.IntegerField(null=True)
+    course_name = models.CharField(max_length=70, null=True, blank=True)
+    credit_hours = models.IntegerField(null=True, blank=True)
     level = models.IntegerField(null=True)
     semester = models.CharField(max_length=10, null=True)
     students = models.ManyToManyField('Student', through='StudentHasCourses')
@@ -95,9 +83,6 @@ class Courses(models.Model):
 
     class Meta:
         db_table = 'Courses'
-
-    def __str__(self):
-        return self.course_code
 
 
 class AcademicTime(models.Model):
@@ -115,9 +100,6 @@ class AcademicTime(models.Model):
 
     class Meta:
         db_table = 'AcademicTime'
-
-    def __str__(self):
-        return self.academic_year_name
 
 
 class DoctorTeachCourses(models.Model):
