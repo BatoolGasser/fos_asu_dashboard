@@ -3,5 +3,7 @@ from django.http.response import HttpResponse
 
 
 # Create your views here.
+
 def home(request):
-    return HttpResponse("Helloooo From Accounts")
+    return render(request=request, template_name='index.html', context={'name':'batool', 'age':"32", 'year':''})
+

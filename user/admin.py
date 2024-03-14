@@ -47,14 +47,14 @@ admin.site.register(Courses, CoursesAdmin)
 class AcademicTimeAdmin(admin.ModelAdmin):
     list_display = ['academic_time_id', 'academic_year_name', 'academic_semester_name', 'academic_year_int',
                     'academic_semester_int']
-    list_filter = ['academic_year_name']
+    list_filter = ['academic_year_name', 'academic_semester_name', 'academic_year_int']
 
 
-admin.site.register(AcademicTime)
+admin.site.register(AcademicTime, AcademicTimeAdmin)
 
 
 class StudentHasCoursesAdmin(admin.ModelAdmin):
-    list_display = ["course_code", "student_id", "course_category", "course_type", "grade", "total_marks"]
+    list_display = ["course_code_id", "academic_time_id", "student_id", "grade", "total_marks"]
     list_filter = ["grade", "course_category", "course_type"]
     search_fields = ['course_code']
 
@@ -67,6 +67,15 @@ class StudentHasProgramAdmin(admin.ModelAdmin):
 
 
 admin.site.register(StudentHasProgram, StudentHasProgramAdmin)
-admin.site.register(StudentHasSemester)
+
+
+class StudentHasSemesterAdmin(admin.ModelAdmin):
+    list_display = ["student_id", "academic_time_id", "cummulative_gpa", "level",
+                    "semester_gpa", "rank"]
+    list_filter = ["student_id"]
+
+
+admin.site.register(StudentHasSemester, StudentHasSemesterAdmin)
+
 admin.site.register(DoctorTeachCourses)
 admin.site.register(ProgramHasCourses)

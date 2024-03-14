@@ -21,17 +21,11 @@ class Doctor(models.Model):
 
 
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    student_id = models.UUIDField(
-        default=uuid.uuid4,
-        unique=True,
-        primary_key=True,
-        editable=False,
-        null=False
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    student_id = models.CharField(primary_key=True, max_length=50)
     student_name = models.CharField(max_length=200, null=True)
     enroll_year = models.DateField(null=True)
-    graduate_year = models.DateField(null=True)
+    graduate_year = models.DateField(null=True, blank=True)
     total_warnings_number = models.IntegerField(null=True)
     supervisor_user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, related_name='supervised_students', null=True)
 
@@ -86,12 +80,7 @@ class Courses(models.Model):
 
 
 class AcademicTime(models.Model):
-    academic_time_id = models.UUIDField(
-        default=uuid.uuid4,
-        unique=True,
-        primary_key=True,
-        editable=False
-    )
+    academic_time_id = models.IntegerField(primary_key=True)
     academic_year_name = models.CharField(max_length=20)
     academic_semester_name = models.CharField(max_length=20)
     academic_year_int = models.IntegerField()
@@ -131,14 +120,14 @@ class StudentHasCourses(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, name='course_code',
                                db_column="course_code")
-    course_category = models.CharField(max_length=30, null=True)
-    course_type = models.CharField(max_length=20, null=True)
+    course_category = models.CharField(max_length=30, null=True, blank=True)
+    course_type = models.CharField(max_length=20, null=True, blank=True)
     grade = models.CharField(max_length=2, null=True)
-    oral = models.IntegerField(null=True)
-    practical = models.IntegerField(null=True)
-    total_marks = models.IntegerField(null=True)
-    year_work_marks = models.IntegerField(null=True)
-    final_marks = models.IntegerField(null=True)
+    oral = models.IntegerField(null=True, blank=True)
+    practical = models.IntegerField(null=True, blank=True)
+    total_marks = models.IntegerField(null=True, blank=True)
+    year_work_marks = models.IntegerField(null=True, blank=True)
+    final_marks = models.IntegerField(null=True, blank=True)
     academic_time = models.ForeignKey(AcademicTime, models.CASCADE)
 
     class Meta:
@@ -159,13 +148,13 @@ class StudentHasProgram(models.Model):
 class StudentHasSemester(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     academic_time = models.ForeignKey(AcademicTime, models.CASCADE, null=True)
-    cummulative_gpa = models.FloatField(null=True)
-    passed_hours = models.IntegerField(null=True)
-    hours_in_progress = models.IntegerField(null=True)
-    warnings_number = models.IntegerField(null=True)
-    level = models.IntegerField(null=True)
-    semester_gpa = models.FloatField(null=True)
-    rank = models.IntegerField(null=True)
+    cummulative_gpa = models.FloatField(null=True, blank=True)
+    passed_hours = models.IntegerField(null=True, blank=True)
+    hours_in_progress = models.IntegerField(null=True, blank=True)
+    warnings_number = models.IntegerField(null=True, blank=True)
+    level = models.IntegerField(null=True, blank=True)
+    semester_gpa = models.FloatField(null=True, blank=True)
+    rank = models.IntegerField(null=True, blank=True)
 
     class Meta:
         db_table = 'StudentHasSemester'
