@@ -1,10 +1,13 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from user.models import *
 
-
 # Admin Panel Customization
+User = get_user_model()
+
+
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['student_id', 'student_name', 'enroll_year', 'graduate_year', 'total_warnings_number']
+    list_display = ['user', 'student_id', 'student_name', 'enroll_year', 'graduate_year', 'total_warnings_number']
     search_fields = ['student_name']
 
 
@@ -12,7 +15,7 @@ admin.site.register(Student, StudentAdmin)
 
 
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ['doctor_id', 'doctor_name']
+    list_display = ['user', 'doctor_id', 'doctor_name']
     search_fields = ['doctor_name']
 
 
@@ -28,7 +31,7 @@ admin.site.register(Program, ProgramAdmin)
 
 
 class RoleAdmin(admin.ModelAdmin):
-    list_display = ['role_id', 'role_name', 'is_decision_maker']
+    list_display = ['user', 'role_name', 'is_decision_maker']
     list_filter = ['role_name', 'is_decision_maker']
 
 
@@ -54,9 +57,24 @@ admin.site.register(AcademicTime, AcademicTimeAdmin)
 
 
 class StudentHasCoursesAdmin(admin.ModelAdmin):
-    list_display = ["course_code_id", "academic_time_id", "student_id", "grade", "total_marks"]
+    def get_student_name(self, obj):
+        return obj.student.student_name
+
+    get_student_name.short_description = 'Student Name'
+
+    def get_academic_time(self, obj):
+        return obj.academic_time.academic_year_name
+
+    get_academic_time.short_description = 'Academic Time'
+
+    def get_semester(self, obj):
+        return obj.academic_time.academic_semester_name
+
+    get_semester.short_description = 'Semester'
+
+    list_display = ['get_student_name', "course_code_id", "get_academic_time", "get_semester", "grade", "total_marks"]
     list_filter = ["grade", "course_category", "course_type"]
-    search_fields = ['course_code']
+    search_fields = ['course_code_id']
 
 
 admin.site.register(StudentHasCourses, StudentHasCoursesAdmin)
@@ -70,8 +88,23 @@ admin.site.register(StudentHasProgram, StudentHasProgramAdmin)
 
 
 class StudentHasSemesterAdmin(admin.ModelAdmin):
-    list_display = ["student_id", "academic_time_id", "cummulative_gpa", "level",
-                    "semester_gpa", "rank"]
+    def get_student_name(self, obj):
+        return obj.student.student_name
+
+    get_student_name.short_description = 'Student Name'
+
+    def get_academic_time(self, obj):
+        return obj.academic_time.academic_year_name
+
+    get_academic_time.short_description = 'Academic Time'
+
+    def get_semester(self, obj):
+        return obj.academic_time.academic_semester_name
+
+    get_semester.short_description = 'Semester'
+
+    list_display = ["get_student_name", "get_academic_time", "get_semester","semester_gpa", "cummulative_gpa",
+                    "level", "rank"]
     list_filter = ["student_id"]
 
 
