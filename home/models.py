@@ -2,11 +2,10 @@ from django.db import models
 from django.conf import settings
 import uuid
 from django.contrib.auth.models import User
-from datetime import datetime
 
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     doctor_id = models.UUIDField(
         default=uuid.uuid4,
         unique=True,
@@ -93,17 +92,17 @@ class AcademicTime(models.Model):
 
 class DoctorTeachCourses(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True)
-    course_code = models.OneToOneField(Courses,
+    course_code = models.ForeignKey(Courses,
                                        on_delete=models.CASCADE,
                                        related_name='doctor_teach_courses',
                                        null=True,
                                        db_column="course_code"
                                        )
-    academic_time = models.OneToOneField(AcademicTime, on_delete=models.CASCADE, null=True)
+    academic_time = models.ForeignKey(AcademicTime, on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = 'DoctorTeachCourses'
-        unique_together = ('doctor', 'course_code', 'academic_time')
+        unique_together = ['doctor', 'course_code', 'academic_time']
 
 
 class ProgramHasCourses(models.Model):

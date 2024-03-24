@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from user.models import *
+from home.models import *
 
 # Admin Panel Customization
 User = get_user_model()
@@ -74,7 +74,7 @@ class StudentHasCoursesAdmin(admin.ModelAdmin):
 
     list_display = ['get_student_name', "course_code_id", "get_academic_time", "get_semester", "grade", "total_marks"]
     list_filter = ["grade", "course_category", "course_type"]
-    search_fields = ['course_code_id']
+    search_fields = ['course_code']
 
 
 admin.site.register(StudentHasCourses, StudentHasCoursesAdmin)
@@ -110,5 +110,32 @@ class StudentHasSemesterAdmin(admin.ModelAdmin):
 
 admin.site.register(StudentHasSemester, StudentHasSemesterAdmin)
 
-admin.site.register(DoctorTeachCourses)
+
+class DoctorTeachCoursesAdmin(admin.ModelAdmin):
+    def get_doctor_name(self, obj):
+        return obj.doctor.doctor_name
+
+    get_doctor_name.short_description = 'Doctor Name'
+
+    def get_course_code(self, obj):
+        return obj.course_code.course_code
+
+    get_course_code.short_description = 'Course Code'
+
+    def get_academic_time(self, obj):
+        return obj.academic_time.academic_year_name
+
+    get_academic_time.short_description = 'Academic Time'
+
+    def get_semester(self, obj):
+        return obj.academic_time.academic_semester_name
+
+    get_semester.short_description = 'Semester'
+
+    list_display = ['get_doctor_name', 'get_course_code', 'get_academic_time', 'get_semester']
+    list_filter = ['doctor__doctor_name']
+
+
+admin.site.register(DoctorTeachCourses, DoctorTeachCoursesAdmin)
+
 admin.site.register(ProgramHasCourses)

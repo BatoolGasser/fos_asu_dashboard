@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ums_dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.0/lottie.min.js"></script>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <div id="lottie-container" style="width: 300px; height: 300px;">
+            <lottie-player
+            src="https://assets2.lottiefiles.com/packages/lf20_G471niMHMD.json"  loop
+            autoplay>
+            </lottie-player>
+        </div>
+
+        {{ myform|crispy }}
+         <input type="submit" value="Submit">
+    </form>
+
+
+    <script>
+        var animationContainer = document.getElementById('lottie-container');
+        var animation = lottie.loadAnimation({
+            container: animationContainer, // Optional, for DOM element placement
+            path: 'https://assets2.lottiefiles.com/packages/lf20_G471niMHMD.json',
+            renderer: 'svg', // Optional, for renderer choice (default)
+            loop: true, // Optional, for continuous looping
+            autoplay: true, // Optional, for automatic playback
+            // Other options as needed (https://lottiefiles.com/docs/player)
+        });
+    </script>
+</body>
+</html>

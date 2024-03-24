@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('doctor_id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
                 ('doctor_name', models.CharField(max_length=200, null=True)),
-                ('user', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('home', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'db_table': 'Doctor',
@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                 ('graduate_year', models.DateField(null=True)),
                 ('total_warnings_number', models.IntegerField(null=True)),
                 ('supervisor_user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='supervised_students', to=settings.AUTH_USER_MODEL)),
-                ('user', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('home', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'db_table': 'Student',
@@ -88,8 +88,8 @@ class Migration(migrations.Migration):
                 ('level', models.IntegerField(null=True)),
                 ('semester_gpa', models.FloatField(null=True)),
                 ('rank', models.IntegerField(null=True)),
-                ('academic_time', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user.academictime')),
-                ('student', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user.student')),
+                ('academic_time', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.academictime')),
+                ('student', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.student')),
             ],
             options={
                 'db_table': 'StudentHasSemester',
@@ -100,9 +100,9 @@ class Migration(migrations.Migration):
             name='StudentHasProgram',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('academic_time', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user.academictime')),
-                ('program', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user.program')),
-                ('student', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user.student')),
+                ('academic_time', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.academictime')),
+                ('program', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.program')),
+                ('student', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.student')),
             ],
             options={
                 'db_table': 'StudentHasProgram',
@@ -121,9 +121,9 @@ class Migration(migrations.Migration):
                 ('total_marks', models.IntegerField(null=True)),
                 ('year_work_marks', models.IntegerField(null=True)),
                 ('final_marks', models.IntegerField(null=True)),
-                ('academic_time', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user.academictime')),
-                ('course_code', models.ForeignKey(db_column='course_code', on_delete=django.db.models.deletion.CASCADE, to='user.courses')),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user.student')),
+                ('academic_time', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.academictime')),
+                ('course_code', models.ForeignKey(db_column='course_code', on_delete=django.db.models.deletion.CASCADE, to='home.courses')),
+                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.student')),
             ],
             options={
                 'db_table': 'StudentHasCourses',
@@ -136,7 +136,7 @@ class Migration(migrations.Migration):
                 ('role_id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True)),
                 ('role_name', models.CharField(max_length=100, null=True)),
                 ('is_decision_maker', models.BooleanField(null=True)),
-                ('user', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('home', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'db_table': 'Role',
@@ -147,8 +147,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('mandatory_type', models.BooleanField(null=True)),
-                ('course_code', models.ForeignKey(db_column='course_code', null=True, on_delete=django.db.models.deletion.CASCADE, to='user.courses')),
-                ('program', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user.program')),
+                ('course_code', models.ForeignKey(db_column='course_code', null=True, on_delete=django.db.models.deletion.CASCADE, to='home.courses')),
+                ('program', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.program')),
             ],
             options={
                 'db_table': 'ProgramHasCourses',
@@ -158,15 +158,15 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='program',
             name='students',
-            field=models.ManyToManyField(through='user.StudentHasProgram', to='user.Student'),
+            field=models.ManyToManyField(through='home.StudentHasProgram', to='home.Student'),
         ),
         migrations.CreateModel(
             name='DoctorTeachCourses',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('academic_time', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to='user.academictime')),
-                ('course_code', models.OneToOneField(db_column='course_code', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='doctor_teach_courses', to='user.courses')),
-                ('doctor', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user.doctor')),
+                ('academic_time', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.academictime')),
+                ('course_code', models.OneToOneField(db_column='course_code', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='doctor_teach_courses', to='home.courses')),
+                ('doctor', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.doctor')),
             ],
             options={
                 'db_table': 'DoctorTeachCourses',
@@ -176,26 +176,26 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='courses',
             name='doctors',
-            field=models.ManyToManyField(through='user.DoctorTeachCourses', to='user.Doctor'),
+            field=models.ManyToManyField(through='home.DoctorTeachCourses', to='home.Doctor'),
         ),
         migrations.AddField(
             model_name='courses',
             name='programs',
-            field=models.ManyToManyField(through='user.ProgramHasCourses', to='user.Program'),
+            field=models.ManyToManyField(through='home.ProgramHasCourses', to='home.Program'),
         ),
         migrations.AddField(
             model_name='courses',
             name='students',
-            field=models.ManyToManyField(through='user.StudentHasCourses', to='user.Student'),
+            field=models.ManyToManyField(through='home.StudentHasCourses', to='home.Student'),
         ),
         migrations.AddField(
             model_name='courses',
             name='supervised_program',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='program_supervise_courses', to='user.program'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='program_supervise_courses', to='home.program'),
         ),
         migrations.AddField(
             model_name='academictime',
             name='students',
-            field=models.ManyToManyField(through='user.StudentHasSemester', to='user.Student'),
+            field=models.ManyToManyField(through='home.StudentHasSemester', to='home.Student'),
         ),
     ]
